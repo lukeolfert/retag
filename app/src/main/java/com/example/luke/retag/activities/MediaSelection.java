@@ -36,7 +36,7 @@ public class MediaSelection extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MediaSelection.this, MusicLibraryActivity.class);
+                Intent intent = new Intent(MediaSelection.this, musicLoadingActivity.class);
                 startActivity(intent);
             }
 

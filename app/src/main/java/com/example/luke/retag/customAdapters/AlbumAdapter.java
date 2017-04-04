@@ -28,7 +28,7 @@ public class AlbumAdapter extends BaseAdapter {
             list = new ArrayList<Menus>();
 
             Resources res = context.getResources();
-            /*
+
             String[] tempAlbumNames = {"The Money Store", "The Money Store", "The Money Store",
 
                                         "The Money Store", "The Money Store", "The Money Store",
@@ -43,7 +43,7 @@ public class AlbumAdapter extends BaseAdapter {
                                     R.drawable.deathgrips, R.drawable.deathgrips, R.drawable.deathgrips,
                                     R.drawable.deathgrips, R.drawable.deathgrips, R.drawable.deathgrips,
                                     R.drawable.deathgrips};
-            */
+
 
         }
 
@@ -79,7 +79,10 @@ public class AlbumAdapter extends BaseAdapter {
                 holder = (ViewHolder) row.getTag();
             }
 
+            // Establishes Temp Menu from List Object (i)
             Menus temp = list.get(i);
+
+            // Sets View Resources from List Object (i) Instance Vars
             holder.myAlbumCover.setImageResource(temp.albumCover);
             holder.myAlbumName.setText(temp.albumNames);
             holder.MyArtistName.setText(temp.artistNames);
@@ -88,6 +91,7 @@ public class AlbumAdapter extends BaseAdapter {
         }
 
         class ViewHolder {
+
             ImageView myAlbumCover;
             TextView myAlbumName;
             TextView MyArtistName;
@@ -100,6 +104,7 @@ public class AlbumAdapter extends BaseAdapter {
         }
 
         class Menus {
+
             int albumCover;
             String albumNames;
             String artistNames;
