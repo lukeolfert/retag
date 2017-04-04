@@ -28,7 +28,7 @@ class getMusic extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... Context) {
 
-        Context.
+        Context.get
         ContentResolver cr = getContentResolver();
         Songs songs = new Songs();
         songs.prepare();
