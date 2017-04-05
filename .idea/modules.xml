@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/reTag.iml" filepath="$PROJECT_DIR$/reTag.iml" />
+      <module fileurl="file://$PROJECT_DIR$/retag.iml" filepath="$PROJECT_DIR$/retag.iml" />
     </modules>
   </component>
 </project>

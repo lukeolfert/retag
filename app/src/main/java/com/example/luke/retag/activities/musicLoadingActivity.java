@@ -19,14 +19,29 @@ public class musicLoadingActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_music_loading);
 
-        new getMusic().execute();
+
+        Context context = musicLoadingActivity.this;
+        ContentResolver cr = context.getContentResolver();
+
+        new getMusic(cr).execute();
     }
 }
 
-class getMusic extends AsyncTask<String, String, String> {
+class getMusic extends AsyncTask<Void, Void, Void> {
+
+    ContentResolver myResolver;
+
+    public getMusic(ContentResolver cr) {
+        super();
+
+        this.myResolver = cr;
+    }
 
     @Override
-    protected String doInBackground(String... Context) {
+    protected Void doInBackground(Void... ContentResolver) {
+
+        Songs index = new Songs(myResolver);
+        index.prepare();
 
         return null;
     }
@@ -37,12 +52,12 @@ class getMusic extends AsyncTask<String, String, String> {
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(Void result) {
 
     }
 
     @Override
-    protected void onProgressUpdate(String... values) {
+    protected void onProgressUpdate(Void... values) {
 
     }
 
