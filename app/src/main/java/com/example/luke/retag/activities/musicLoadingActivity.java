@@ -12,6 +12,8 @@ import com.example.luke.retag.mediaTypes.Albums;
 import com.example.luke.retag.mediaTypes.Artists;
 import com.example.luke.retag.mediaTypes.Songs;
 
+import java.util.List;
+
 public class musicLoadingActivity extends AppCompatActivity {
 
     @Override
@@ -33,6 +35,9 @@ public class musicLoadingActivity extends AppCompatActivity {
 
 class getMusic extends AsyncTask<Void, Void, Void> {
 
+    List<Songs.Song> songLibrary;
+    List<Artists.Artist> artistLibrary;
+    List<Albums.Album> albumLibrary;
     ContentResolver myResolver;
     //ImageView loadingIcon;
 
@@ -56,6 +61,10 @@ class getMusic extends AsyncTask<Void, Void, Void> {
 
         Artists artistsIndex = new Artists(myResolver);
         artistsIndex.prepare();
+
+        this.albumLibrary = albumIndex.getAlbumLibrary();
+        this.songLibrary = songIndex.getSongLibrary();
+        this.artistLibrary = artistsIndex.getArtistLibrary();
 
         return null;
     }

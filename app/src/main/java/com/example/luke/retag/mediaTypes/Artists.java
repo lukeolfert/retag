@@ -70,6 +70,10 @@ public class Artists {
         Log.i(TAG, "Done querying media. MusicRetriever is ready.");
     }
 
+    public List<Artist> getArtistLibrary() {
+        return mItems;
+    }
+
     public ContentResolver getContentResolver() {
         return mContentResolver;
     }
