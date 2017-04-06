@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-
 import com.example.luke.retag.R;
 import com.example.luke.retag.customAdapters.AlbumAdapter;
 

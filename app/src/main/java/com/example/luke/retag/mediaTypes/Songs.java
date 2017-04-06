@@ -37,7 +37,7 @@ public class Songs {
         // Perform a query on the content resolver. The URI we're passing specifies that we
         // want to query for all audio media on external storage (e.g. SD card)
         Cursor cur = mContentResolver.query(uri, null,
-                MediaStore.Audio.Media.IS_MUSIC + " = 1", null, null);
+                MediaStore.Audio.Media.IS_MUSIC + " = 1", null, MediaStore.Audio.Media.TITLE + " ASC");
         Log.i(TAG, "Query finished. " + (cur == null ? "Returned NULL." : "Returned a cursor."));
         if (cur == null) {
             // Query failed...

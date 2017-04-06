@@ -17,15 +17,15 @@ import java.util.Random;
  * resolver). After that, it's ready to retrieve a random song, with its title and URI, upon
  * request.
  */
-public class Albums {
+public class Artists {
 
     final String TAG = "MusicRetriever";
     ContentResolver mContentResolver;
     // the items (songs) we have queried
-    List<Album> mItems = new ArrayList<Album>();
+    List<Artist> mItems = new ArrayList<Artist>();
     Random mRandom = new Random();
 
-    public Albums(ContentResolver cr) {
+    public Artists(ContentResolver cr) {
         mContentResolver = cr;
     }
     /**
@@ -33,12 +33,12 @@ public class Albums {
      * blocking the main thread.
      */
     public void prepare() {
-        Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
+        Uri uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
         Log.i(TAG, "Querying media...");
         Log.i(TAG, "URI: " + uri.toString());
         // Perform a query on the content resolver. The URI we're passing specifies that we
         // want to query for all audio media on external storage (e.g. SD card)
-        Cursor cur = mContentResolver.query(uri, null, null, null, MediaStore.Audio.Albums.ALBUM + " ASC");
+        Cursor cur = mContentResolver.query(uri, null, null, null, MediaStore.Audio.Artists.ARTIST + " ASC");
         Log.i(TAG, "Query finished. " + (cur == null ? "Returned NULL." : "Returned a cursor."));
         if (cur == null) {
             // Query failed...
@@ -52,20 +52,20 @@ public class Albums {
         }
         Log.i(TAG, "Listing...");
         // retrieve the indices of the columns where the ID, title, etc. of the song are
-        int artistName = cur.getColumnIndex(MediaStore.Audio.Albums.ARTIST);
-        int albumName = cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM);
-        int songCount = cur.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS);
-        int artistId = cur.getColumnIndex(MediaStore.Audio.Albums._ID);
-        Log.i(TAG, "Title column index: " + String.valueOf(albumName));
-        Log.i(TAG, "ID column index: " + String.valueOf(albumName));
+        int artistColumn = cur.getColumnIndex(MediaStore.Audio.Artists.ARTIST);
+        int songCount = cur.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_TRACKS);
+        int albumCount = cur.getColumnIndex(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS);
+        int idColumn = cur.getColumnIndex(MediaStore.Audio.Artists._ID);
+        Log.i(TAG, "Title column index: " + String.valueOf(artistColumn));
+        Log.i(TAG, "ID column index: " + String.valueOf(artistColumn));
         // add each song to mItems
         do {
-            Log.i(TAG, "ID: " + cur.getString(artistId) + " Title: " + cur.getString(albumName));
-            mItems.add(new Album(
-                    cur.getLong(artistId),
-                    cur.getString(artistName),
-                    cur.getString(albumName),
-                    cur.getLong(songCount)));
+            Log.i(TAG, "ID: " + cur.getString(idColumn) + " Title: " + cur.getString(artistColumn));
+            mItems.add(new Artist(
+                    cur.getLong(idColumn),
+                    cur.getString(artistColumn),
+                    cur.getInt(songCount),
+                    cur.getInt(albumCount)));
         } while (cur.moveToNext());
         Log.i(TAG, "Done querying media. MusicRetriever is ready.");
     }
@@ -74,42 +74,39 @@ public class Albums {
         return mContentResolver;
     }
     /** Returns a random Item. If there are no items available, returns null. */
-    public Album getRandomItem() {
+    public Artist getRandomItem() {
         if (mItems.size() <= 0) return null;
         return mItems.get(mRandom.nextInt(mItems.size()));
     }
 
-    public static class Album {
+    public static class Artist {
 
         long id;
-        String artist;
-        String title;
-        String album;
-        long duration;
+        String artistName;
+        int songCount;
+        int albumCount;
 
-        public Album(long id, String artist, String albumName, long songCount) {
+        public Artist(long id, String artistName, int songCount, int albumCount) {
 
             this.id = id;
-            this.artist = artist;
-            this.title = albumName;
-            this.album = album;
-            this.duration = songCount;
+            this.artistName = artistName;
+            this.songCount = songCount;
+            this.albumCount = albumCount;
 
         }
         public long getId() {
             return id;
         }
         public String getArtist() {
-            return artist;
+            return artistName;
         }
-        public String getTitle() {
-            return title;
+
+        public int getAlbumCount() {
+            return albumCount;
         }
-        public String getAlbum() {
-            return album;
-        }
-        public long getDuration() {
-            return duration;
+
+        public int getSongCount() {
+            return songCount;
         }
         public Uri getURI() {
             return ContentUris.withAppendedId(
