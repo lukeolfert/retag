@@ -1,18 +1,23 @@
 package com.example.luke.retag.activities;
 
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.ImageView;
 import com.example.luke.retag.R;
+import com.example.luke.retag.customAdapters.dataTransfer;
+import com.example.luke.retag.mediaTypes.ASyncResponse;
 import com.example.luke.retag.mediaTypes.Albums;
 import com.example.luke.retag.mediaTypes.Artists;
+import com.example.luke.retag.mediaTypes.LibraryHolder;
+import com.example.luke.retag.mediaTypes.SaveState;
 import com.example.luke.retag.mediaTypes.Songs;
-
-import java.util.List;
 
 public class musicLoadingActivity extends AppCompatActivity {
 
@@ -29,29 +34,51 @@ public class musicLoadingActivity extends AppCompatActivity {
         ContentResolver cr = context.getContentResolver();
 
         // Initializing Asyncronous Task
-        new getMusic(cr, null).execute();
+
+        getMusic task = new getMusic(cr,
+
+                new ASyncResponse() {
+
+                    @Override
+                    public void processFinish(LibraryHolder library) {
+
+                        SaveState.library.add(library);
+                        SaveState.saveData(SaveState.getInstance());
+
+                        //dataTransfer data = new dataTransfer();
+                        //data.setLibrary(library);
+
+                        Intent intent = new Intent(musicLoadingActivity.this, MusicLibraryActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
+
+        task.execute(new Object[] { "Youe request to aynchronous task class is giving here.." });
+
     }
 }
 
-class getMusic extends AsyncTask<Void, Void, Void> {
+class getMusic extends AsyncTask<Object, Object, LibraryHolder> {
 
-    List<Songs.Song> songLibrary;
-    List<Artists.Artist> artistLibrary;
-    List<Albums.Album> albumLibrary;
+    public LibraryHolder library;
     ContentResolver myResolver;
+    public ASyncResponse delegate = null; //Call back interface
+
     //ImageView loadingIcon;
 
     // Setting Instance Variables upon Constructor Call
 
-    public getMusic(ContentResolver cr, ImageView loadingIcon) {
+    public getMusic(ContentResolver cr, ASyncResponse response) {
         super();
 
         //this.loadingIcon = loadingIcon;
-        this.myResolver = cr;
+        myResolver = cr;
+        delegate = response;
     }
 
     @Override
-    protected Void doInBackground(Void... ContentResolver) {
+    protected LibraryHolder doInBackground(Object... ContentResolver) {
 
         Albums albumIndex = new Albums(myResolver);
         albumIndex.prepare();
@@ -62,11 +89,11 @@ class getMusic extends AsyncTask<Void, Void, Void> {
         Artists artistsIndex = new Artists(myResolver);
         artistsIndex.prepare();
 
-        this.albumLibrary = albumIndex.getAlbumLibrary();
-        this.songLibrary = songIndex.getSongLibrary();
-        this.artistLibrary = artistsIndex.getArtistLibrary();
+        this.library = new LibraryHolder(songIndex.getSongLibrary(),
+                                         artistsIndex.getArtistLibrary(),
+                                         albumIndex.getAlbumLibrary());
 
-        return null;
+        return library;
     }
 
     @Override
@@ -75,15 +102,18 @@ class getMusic extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(LibraryHolder result) {
 
-
+        delegate.processFinish(result);
 
     }
 
     @Override
-    protected void onProgressUpdate(Void... values) {
+    protected void onProgressUpdate(Object... values) {
 
     }
 
+    public LibraryHolder getLibrary() {
+        return library;
+    }
 }
