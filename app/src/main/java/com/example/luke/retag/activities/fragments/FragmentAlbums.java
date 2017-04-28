@@ -10,9 +10,7 @@ import android.widget.GridView;
 import com.example.luke.retag.R;
 import com.example.luke.retag.customAdapters.AlbumAdapter;
 
-/**
- * Created by Luke on 2017-03-31.
- */
+import java.io.IOException;
 
 public class FragmentAlbums extends Fragment {
 
@@ -33,7 +31,13 @@ public class FragmentAlbums extends Fragment {
         View mView = inflater.inflate(R.layout.fragment_albums, container, false);
 
         gridView = (GridView) mView.findViewById(R.id.albumGridView);
-        AlbumAdapter = new AlbumAdapter(getActivity());
+        try {
+            AlbumAdapter = new AlbumAdapter(getActivity());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         gridView.setAdapter(AlbumAdapter);
 
         return mView;

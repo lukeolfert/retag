@@ -11,8 +11,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import com.example.luke.retag.R;
 import com.example.luke.retag.activities.fragments.PagerAdapter;
-import com.example.luke.retag.mediaTypes.LibraryHolder;
-import com.example.luke.retag.mediaTypes.SaveState;
 
 public class MusicLibraryActivity extends AppCompatActivity {
 
@@ -41,9 +39,6 @@ public class MusicLibraryActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Songs"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        SaveState sv = SaveState.loadData();
-        LibraryHolder myLibrary = sv.loadData().
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.container);
 

@@ -1,6 +1,5 @@
 package com.example.luke.retag.activities;
 
-import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,15 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
-import android.widget.ImageView;
+
 import com.example.luke.retag.R;
-import com.example.luke.retag.customAdapters.dataTransfer;
-import com.example.luke.retag.mediaTypes.ASyncResponse;
-import com.example.luke.retag.mediaTypes.Albums;
-import com.example.luke.retag.mediaTypes.Artists;
-import com.example.luke.retag.mediaTypes.LibraryHolder;
-import com.example.luke.retag.mediaTypes.SaveState;
-import com.example.luke.retag.mediaTypes.Songs;
+import com.example.luke.retag.mediaLibraries.Album;
+import com.example.luke.retag.mediaLibraries.AlbumQuery;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 public class musicLoadingActivity extends AppCompatActivity {
 
@@ -27,93 +26,58 @@ public class musicLoadingActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_music_loading);
 
-        //ImageView musicLoadingIcon = (ImageView) findViewById(R.id.imageView);
-
         // Fetching Activity Context for Content Resolver
+
         Context context = musicLoadingActivity.this;
         ContentResolver cr = context.getContentResolver();
 
         // Initializing Asyncronous Task
 
-        getMusic task = new getMusic(cr,
-
-                new ASyncResponse() {
-
-                    @Override
-                    public void processFinish(LibraryHolder library) {
-
-                        SaveState.library.add(library);
-                        SaveState.saveData(SaveState.getInstance());
-
-                        //dataTransfer data = new dataTransfer();
-                        //data.setLibrary(library);
-
-                        Intent intent = new Intent(musicLoadingActivity.this, MusicLibraryActivity.class);
-                        startActivity(intent);
-
-                    }
-                });
-
-        task.execute(new Object[] { "Youe request to aynchronous task class is giving here.." });
+        getMusic task = new getMusic(context, cr);
+        task.execute();
 
     }
 }
 
-class getMusic extends AsyncTask<Object, Object, LibraryHolder> {
+class getMusic extends AsyncTask<String, Void, String> {
 
-    public LibraryHolder library;
+    Context context;
     ContentResolver myResolver;
-    public ASyncResponse delegate = null; //Call back interface
-
-    //ImageView loadingIcon;
+    ArrayList<Album> albumLibrary;
 
     // Setting Instance Variables upon Constructor Call
 
-    public getMusic(ContentResolver cr, ASyncResponse response) {
+    public getMusic(Context ctx, ContentResolver cr) {
         super();
 
-        //this.loadingIcon = loadingIcon;
+        context = ctx;
         myResolver = cr;
-        delegate = response;
     }
 
     @Override
-    protected LibraryHolder doInBackground(Object... ContentResolver) {
+    protected String doInBackground(String... params) {
+        albumLibrary = AlbumQuery.fetchAlbumLibrary(myResolver);
 
-        Albums albumIndex = new Albums(myResolver);
-        albumIndex.prepare();
+        try {
 
-        Songs songIndex = new Songs(myResolver);
-        songIndex.prepare();
+            FileOutputStream fos = context.openFileOutput("AlbumLibrary", Context.MODE_PRIVATE);
+            ObjectOutputStream os = null;
+            os = new ObjectOutputStream(fos);
+            os.writeObject(albumLibrary);
+            os.close();
+            fos.close();
 
-        Artists artistsIndex = new Artists(myResolver);
-        artistsIndex.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        this.library = new LibraryHolder(songIndex.getSongLibrary(),
-                                         artistsIndex.getArtistLibrary(),
-                                         albumIndex.getAlbumLibrary());
-
-        return library;
+        return "Finished";
     }
 
     @Override
-    protected void onPreExecute() {
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
 
-    }
-
-    @Override
-    protected void onPostExecute(LibraryHolder result) {
-
-        delegate.processFinish(result);
-
-    }
-
-    @Override
-    protected void onProgressUpdate(Object... values) {
-
-    }
-
-    public LibraryHolder getLibrary() {
-        return library;
+        context.startActivity(new Intent(context, MusicLibraryActivity.class));
     }
 }

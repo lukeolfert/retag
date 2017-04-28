@@ -2,16 +2,20 @@ package com.example.luke.retag.customAdapters;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.luke.retag.R;
-
+import com.example.luke.retag.mediaLibraries.Album;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Luke on 2017-03-31.
@@ -19,44 +23,34 @@ import java.util.ArrayList;
 
 public class AlbumAdapter extends BaseAdapter {
 
-        ArrayList<Menus> list;
+        ArrayList<Album> albumLibrary = new ArrayList<>();
         Context context;
 
-        public AlbumAdapter(Context context) {
+        public AlbumAdapter(Context context) throws IOException, ClassNotFoundException {
 
             this.context = context;
-            list = new ArrayList<Menus>();
 
             Resources res = context.getResources();
 
-            String[] tempAlbumNames = {"The Money Store", "The Money Store", "The Money Store",
-
-                                        "The Money Store", "The Money Store", "The Money Store",
-                                        "The Money Store", "The Money Store", "The Money Store",
-                                        "The Money Store", };
-
-            String[] tempArtistNames = {"Death Grips", "Death Grips", "Death Grips", "Death Grips",
-                                        "Death Grips", "Death Grips", "Death Grips", "Death Grips",
-                                        "Death Grips", "Death Grips", };
-
-            int[] tempCoverPaths = {R.drawable.deathgrips, R.drawable.deathgrips, R.drawable.deathgrips,
-                                    R.drawable.deathgrips, R.drawable.deathgrips, R.drawable.deathgrips,
-                                    R.drawable.deathgrips, R.drawable.deathgrips, R.drawable.deathgrips,
-                                    R.drawable.deathgrips};
-
-
+            FileInputStream fis = context.openFileInput("AlbumLibrary");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            this.albumLibrary = (ArrayList<Album>) is.readObject();
+            is.close();
+            fis.close();
         }
 
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
-            return list.size();
+
+            return albumLibrary.size();
+
         }
 
         @Override
         public Object getItem(int i) {
             // TODO Auto-generated method stub
-            return list.get(i);
+            return null;
         }
 
         @Override
@@ -80,12 +74,17 @@ public class AlbumAdapter extends BaseAdapter {
             }
 
             // Establishes Temp Menu from List Object (i)
-            Menus temp = list.get(i);
+            Album temp = albumLibrary.get(i);
 
             // Sets View Resources from List Object (i) Instance Vars
-            holder.myAlbumCover.setImageResource(temp.albumCover);
-            holder.myAlbumName.setText(temp.albumNames);
-            holder.MyArtistName.setText(temp.artistNames);
+            Drawable tempCover = Drawable.createFromPath(temp.getAlbumArtwork());
+
+            holder.myAlbumCover.setImageDrawable(tempCover);
+            holder.myAlbumName.setText(temp.getAlbumName());
+            holder.MyArtistName.setText(temp.getAlbumArtist());
+            holder.myAlbumName.setSelected(true);
+            holder.MyArtistName.setSelected(true);
+            holder.myAlbumCover.setClipToOutline(true);
 
             return row;
         }
@@ -103,19 +102,6 @@ public class AlbumAdapter extends BaseAdapter {
             }
         }
 
-        class Menus {
-
-            int albumCover;
-            String albumNames;
-            String artistNames;
-
-            Menus(int albumCover, String albumNames, String artistNames) {
-                this.albumCover = albumCover;
-                this.albumNames = albumNames;
-                this.artistNames = artistNames;
-            }
-        }
-
-    }
+}
 
 
