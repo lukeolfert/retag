@@ -37,7 +37,7 @@ public class FasterAnimationsContainer{
     private ArrayList<AnimationFrame> mAnimationFrames; // list for all frames of animation
     private int mIndex; // index of current frame
 
-    private boolean mShouldRun; // true if the animation should continue running. Used to stop the animation
+    public boolean mShouldRun; // true if the animation should continue running. Used to stop the animation
     private boolean mIsRunning; // true if the animation prevents starting the animation twice
     private SoftReference<ImageView> mSoftReferenceImageView; // Used to prevent holding ImageView when it should be dead.
     private Handler mHandler; // Handler to communication with UIThread

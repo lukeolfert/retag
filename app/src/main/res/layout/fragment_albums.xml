@@ -12,19 +12,20 @@
         android:id="@+id/albumGridView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:columnWidth="100dp"
-        android:numColumns="3"
-        android:verticalSpacing="16dp"
-        android:horizontalSpacing="16dp"
-        android:stretchMode="columnWidth"
-        android:foregroundGravity="center"
         android:layout_centerHorizontal="false"
         android:layout_centerInParent="true"
-        android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:scrollbarSize="0dp" />
+        android:columnWidth="100dp"
+        android:foregroundGravity="center"
+        android:gravity="center_horizontal"
+        android:horizontalSpacing="16dp"
+        android:numColumns="3"
+        android:scrollbarSize="0dp"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="16dp" />
 
 </FrameLayout>

@@ -2,6 +2,7 @@ package com.example.luke.retag.mediaLibraries;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;

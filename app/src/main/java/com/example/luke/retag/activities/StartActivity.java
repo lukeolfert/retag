@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -32,10 +34,9 @@ public class StartActivity extends AppCompatActivity {
             R.drawable.frame_0013_1, R.drawable.frame_0012_1, R.drawable.frame_0011_1,
             R.drawable.frame_0010_1, R.drawable.frame_0009_1, R.drawable.frame_0008_1,
             R.drawable.frame_0007_1, R.drawable.frame_0006_1, R.drawable.frame_0005_1,
-            R.drawable.frame_0004_1, R.drawable.frame_0003_1, R.drawable.frame_0002_1,
-            R.drawable.frame_0001_1, R.drawable.frame_0000_1, };
+            R.drawable.frame_0004_1, R.drawable.frame_0003_1, R.drawable.frame_0002_1};
 
-    private static final int ANIMATION_INTERVAL = 26; // 500ms
+    private static final int ANIMATION_INTERVAL = 30; // 500ms
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,9 @@ public class StartActivity extends AppCompatActivity {
         Button getStarted = (Button) findViewById(R.id.button2);
         ImageView reTagLogo = (ImageView) findViewById(R.id.imageView);
         //ImageView title = (ImageView) findViewById(R.id.imageView2);
+
+        Animation animFadein = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slideup_fadein);
+        getStarted.setAnimation(animFadein);
 
         // Typeface Changes
 
@@ -64,9 +68,11 @@ public class StartActivity extends AppCompatActivity {
 
         // Triggering before status is set - fix
 
-        if(!mFasterAnimationsContainer.getStatus()) {
+        if(!mFasterAnimationsContainer.mShouldRun) {
 
-            reTagLogo.setImageResource(R.drawable.frame_0000_1);
+            mFasterAnimationsContainer.removeAllFrames();
+            //reTagLogo.setImageResource(R.drawable.frame_0000_1);
+            getStarted.startAnimation(animFadein);
         }
 
         getStarted.setOnClickListener(new View.OnClickListener() {

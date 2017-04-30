@@ -2,20 +2,21 @@ package com.example.luke.retag.customAdapters;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.luke.retag.R;
 import com.example.luke.retag.mediaLibraries.Album;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Luke on 2017-03-31.
@@ -23,8 +24,10 @@ import java.util.List;
 
 public class AlbumAdapter extends BaseAdapter {
 
-        ArrayList<Album> albumLibrary = new ArrayList<>();
+        public ArrayList<Album> albumLibrary = new ArrayList<>();
         Context context;
+        Album temp;
+        int iteration;
 
         public AlbumAdapter(Context context) throws IOException, ClassNotFoundException {
 
@@ -37,6 +40,22 @@ public class AlbumAdapter extends BaseAdapter {
             this.albumLibrary = (ArrayList<Album>) is.readObject();
             is.close();
             fis.close();
+
+            new Thread(new Runnable() {
+                public void run(){
+
+                    for(int i = 0; i < albumLibrary.size(); i++) {
+
+                        Album temp = albumLibrary.get(i);
+                        temp.setAlbumArt();
+
+                    }
+
+                }
+            }).start();
+
+
+
         }
 
         @Override
@@ -59,32 +78,34 @@ public class AlbumAdapter extends BaseAdapter {
             return i;
         }
 
+
+
         @Override
-        public View getView(int i, View convertView, ViewGroup parent) {
+        public View getView(final int i, View convertView, ViewGroup parent) {
             View row = convertView;
             ViewHolder holder = null;
+            this.iteration = i;
+
             if (row == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 row = inflater.inflate(R.layout.albumblock, parent, false);
                 holder = new ViewHolder(row);
                 row.setTag(holder);
+                holder.myAlbumCover.setClipToOutline(true);
+
             } else {
                 holder = (ViewHolder) row.getTag();
+
             }
 
             // Establishes Temp Menu from List Object (i)
-            Album temp = albumLibrary.get(i);
+            this.temp = albumLibrary.get(i);
 
             // Sets View Resources from List Object (i) Instance Vars
-            Drawable tempCover = Drawable.createFromPath(temp.getAlbumArtwork());
-
-            holder.myAlbumCover.setImageDrawable(tempCover);
+            holder.myAlbumCover.setImageDrawable(temp.getAlbumArtwork());
             holder.myAlbumName.setText(temp.getAlbumName());
             holder.MyArtistName.setText(temp.getAlbumArtist());
-            holder.myAlbumName.setSelected(true);
-            holder.MyArtistName.setSelected(true);
-            holder.myAlbumCover.setClipToOutline(true);
 
             return row;
         }

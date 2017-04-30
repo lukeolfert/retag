@@ -6,14 +6,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
+
 import com.example.luke.retag.R;
 import com.example.luke.retag.customAdapters.AlbumAdapter;
+import com.example.luke.retag.mediaLibraries.Album;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FragmentAlbums extends Fragment {
 
+    ArrayList<Album> library;
     GridView gridView;
     AlbumAdapter AlbumAdapter;
 
@@ -39,6 +45,24 @@ public class FragmentAlbums extends Fragment {
             e.printStackTrace();
         }
         gridView.setAdapter(AlbumAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parentView, View albumBlock, int adapterPosition, long rowID) {
+
+                if (library == null) {
+
+                    library = AlbumAdapter.albumLibrary;
+                }
+
+                Album temp = library.get(adapterPosition);
+                Toast.makeText(getContext(), "OnClick for " + temp.getAlbumName(), Toast.LENGTH_SHORT).show();
+
+
+            }
+
+        });
 
         return mView;
     }
