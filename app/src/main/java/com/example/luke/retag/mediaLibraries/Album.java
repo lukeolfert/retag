@@ -16,7 +16,6 @@ public class Album implements Serializable {
         this.albumName = albumName;
         this.albumArtist = albumArtist;
         this.songCount = songCount;
-        this.albumURI = albumURI;
         this.albumArtworkPath = albumArtPath;
 
     }

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/popUpBGLinear"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/white_rectangle"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.example.luke.retag.customLayouts.SquareImageView
+            android:id="@+id/albumArtPop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_rectangle_top"
+            android:foreground="@drawable/transblack_gradient"
+            android:scaleType="fitXY"
+            android:src="@drawable/daftpunk"></com.example.luke.retag.customLayouts.SquareImageView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|left">
+
+            <TextView
+                android:id="@+id/albumArtist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/textRelative"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="20dp"
+                android:text="DAFT PUNK"
+                android:textAllCaps="true"
+                android:textColor="#fff"
+                android:textSize="28sp" />
+
+            <RelativeLayout
+                android:id="@+id/textRelative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/albumName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@+id/framegenre"
+                    android:paddingRight="20dp"
+                    android:text="HUMAN AFTER ALL"
+                    android:textAllCaps="true"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+
+                <FrameLayout
+                    android:id="@+id/framegenre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/white_rectangle">
+
+                    <TextView
+                        android:id="@+id/albumGenre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
+                        android:layout_marginTop="3dp"
+                        android:text="FRENCH HOUSE"
+                        android:textAllCaps="true"
+                        android:textColor="#000"
+                        android:textSize="12sp" />
+                </FrameLayout>
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:elevation="4dp"
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+    </LinearLayout>
+
+</LinearLayout>

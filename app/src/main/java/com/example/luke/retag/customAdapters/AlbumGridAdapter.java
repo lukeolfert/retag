@@ -8,28 +8,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.luke.retag.R;
 import com.example.luke.retag.mediaLibraries.Album;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-/**
- * Created by Luke on 2017-03-31.
- */
-
-public class AlbumAdapter extends BaseAdapter {
+public class AlbumGridAdapter extends BaseAdapter {
 
         public ArrayList<Album> albumLibrary = new ArrayList<>();
+        ViewHolder holder;
         Context context;
         Album temp;
         int iteration;
 
-        public AlbumAdapter(Context context) throws IOException, ClassNotFoundException {
+        public AlbumGridAdapter(Context context) throws IOException, ClassNotFoundException {
 
             this.context = context;
 
@@ -58,56 +52,67 @@ public class AlbumAdapter extends BaseAdapter {
 
         }
 
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
 
-            return albumLibrary.size();
+    @Override
+    public int getCount() {
+        // TODO Auto-generated method stub
 
-        }
+        return albumLibrary.size();
+    }
 
-        @Override
-        public Object getItem(int i) {
-            // TODO Auto-generated method stub
-            return null;
-        }
+    @Override
+    public Object getItem(int i) {
+        return i;
+    }
 
-        @Override
-        public long getItemId(int i) {
-            // TODO Auto-generated method stub
-            return i;
-        }
+    @Override
+    public long getItemId(int i) {
+        // TODO Auto-generated method stub
+        return i;
+    }
 
-
-
-        @Override
+    @Override
         public View getView(final int i, View convertView, ViewGroup parent) {
-            View row = convertView;
-            ViewHolder holder = null;
+
             this.iteration = i;
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.albumblock, null, false);
 
-            if (row == null) {
+            if (convertView == null) {
 
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.albumblock, parent, false);
-                holder = new ViewHolder(row);
-                row.setTag(holder);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
                 holder.myAlbumCover.setClipToOutline(true);
 
-            } else {
-                holder = (ViewHolder) row.getTag();
+            }
+
+            else {
+
+                holder = (ViewHolder) convertView.getTag();
 
             }
 
             // Establishes Temp Menu from List Object (i)
+
             this.temp = albumLibrary.get(i);
 
             // Sets View Resources from List Object (i) Instance Vars
-            holder.myAlbumCover.setImageDrawable(temp.getAlbumArtwork());
-            holder.myAlbumName.setText(temp.getAlbumName());
-            holder.MyArtistName.setText(temp.getAlbumArtist());
 
-            return row;
+            this.holder.myAlbumName.setText(temp.getAlbumName());
+            this.holder.MyArtistName.setText(temp.getAlbumArtist());
+            this.holder.myAlbumCover.setClipToOutline(true);
+
+            this.holder.myAlbumCover.setImageDrawable(temp.getAlbumArtwork());
+
+            if (holder.myAlbumCover.getDrawable() == null) {
+                this.holder.myAlbumCover.setImageDrawable(context.getDrawable(R.drawable.noart));
+            }
+
+            return convertView;
         }
 
         class ViewHolder {

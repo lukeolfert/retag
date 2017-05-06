@@ -27,7 +27,6 @@ public class AlbumQuery {
                 int myAlbumCover = musicCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART);
                 int myAlbumSongCount = musicCursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS);
 
-
                 long thisId = musicCursor.getLong(myIDColumn);
 
                 String albumNameCur = musicCursor.getString(myAlbumName);

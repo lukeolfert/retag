@@ -18,4 +18,13 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="AppTheme.AlbumPop" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="albumPopAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/album_popup_in</item>
+        <item name="android:windowExitAnimation">@anim/album_popup_out</item>
+    </style>
+
 </resources>
